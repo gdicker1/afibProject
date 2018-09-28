@@ -30,7 +30,7 @@ hom_fileMake.py: Creates apd and resistance files offline for homogeneous tissue
 
 afib.singularity: Bootstrap file to create a Singularity version 2.3.2 container using an Ubuntu 16.04 base image. Can also use versions of the instructions in the post section to attempt to have the correct dependencies for this project.
 
-afib_het.pbs, afib_hom.pbs, afib_hom.sh: Slurm or Bash files with instructions to start the respective \*_runner.py files.
+afib_hom.sh: Bash file with instructions to start the respective \*_runner.py files.
 
 Tissues/ : Directory containing the reference 80x80_RC10.vepxml tissue and a sub-directory of the tissue files used for the data collection in Spring of 2018.
 

@@ -28,6 +28,7 @@ by Geo. Dylan Dickerson
 	# Make sure files are updated correctly
 	apt-get -y update && apt-get -y dist-upgrade
 	# Make needed directories for binding
+	# Note this assumes the repo with code is at /gscratch/afibProject
 	mkdir -p /project /gscratch/afibProject /lscratch
 
 %environment
