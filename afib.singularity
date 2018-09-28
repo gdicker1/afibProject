@@ -1,0 +1,38 @@
+Bootstrap:docker
+From:ubuntu:16.04  # Chosen just for ease of development
+
+%help
+Singularity container to run on the Mt. Moran High Performance Cluster at UWyo.
+For UWyo Ind. Study in Genetic Algorithms Spring 2018
+by Geo. Dylan Dickerson
+
+
+%setup
+
+%post
+	# Prep the container
+	apt-get -y update && apt-get -y dist-upgrade
+	apt-get install -y build-essential tar unzip \
+	libgl1-mesa-glx wget
+	apt-get dist-upgrade -y
+	# Install anaconda python
+	wget https://repo.continuum.io/archive/Anaconda3-5.1.0-Linux-x86_64.sh
+	bash Anaconda3-5.1.0-Linux-x86_64.sh -b -p /Software/anaconda3
+	PATH="/Software/anaconda3/bin:$PATH"
+	export PATH
+	# Create a conda environment and add necessary packages
+	conda install -y lxml
+	pip install cma
+	# Cleanup unneeded files
+	rm Anaconda3-5.1.0-Linux-x86_64.sh
+	# Make sure files are updated correctly
+	apt-get -y update && apt-get -y dist-upgrade
+	# Make needed directories for binding on HPC
+	mkdir -p /project /gscratch/gdicker1/CMAES_runner /lscratch
+
+%environment
+	PYPATH="/Software/anaconda3/bin"
+	PATH="/Software/anaconda3/bin:$PATH"
+	export PYPATH PATH
+
+%runscript
