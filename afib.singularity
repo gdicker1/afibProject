@@ -27,8 +27,8 @@ by Geo. Dylan Dickerson
 	rm Anaconda3-5.1.0-Linux-x86_64.sh
 	# Make sure files are updated correctly
 	apt-get -y update && apt-get -y dist-upgrade
-	# Make needed directories for binding on HPC
-	mkdir -p /project /gscratch/gdicker1/CMAES_runner /lscratch
+	# Make needed directories for binding
+	mkdir -p /project /gscratch/afibProject /lscratch
 
 %environment
 	PYPATH="/Software/anaconda3/bin"

@@ -1,5 +1,5 @@
 #!/bin/sh
-CMADIR="/gscratch/gdicker1/CMAES_runner"
+CMADIR="/gscratch/afibProject"
 RUNDIR="$CMADIR/Text_Files/homogeneous/$(date +%s)"
 mkdir -p $RUNDIR
 cd $RUNDIR
