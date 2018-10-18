@@ -38,9 +38,11 @@ if __name__ == '__main__':
 
     # Error checking of the command-line arguments
     if(not(0 <= startInd) or not(300 > startInd)):
-        raise argparse.ArgumentTypeError('start not in the correct range [0,299]')
+        raise argparse.ArgumentTypeError(
+            'start not in the correct range [0,299]')
     if(not(0 <= stopInd) or not(300 > stopInd)):
-        raise argparse.ArgumentTypeError('end not in the correct range [0,299]')
+        raise argparse.ArgumentTypeError(
+            'end not in the correct range [0,299]')
     if(not(startInd <= stopInd)):
         raise argparse.ArgumentTypeError('start not less than or equal to end')
     # Ensure paths don't end in /
@@ -208,14 +210,15 @@ if __name__ == '__main__':
 
     # Ensure the initial sample is within quarantine and ablation limits
     x0 = np.random.uniform(0.3, 0.7, 24)
-    ablns, quars, _, _ = evS.analyzeSolutions([x0], ablnFile, heterXmlFiles,
+    ablns, quars, _, _ = evS.analyzeSolutions([x0], tissueWidth,
+                                              ablnFile, heterXmlFiles,
                                               heterConsoleFiles,
                                               batchtoolpath, tissueFile,
                                               runDir)
     while(not evS.is_feasible(ablns[0], quars[0], tissueSize)):
         x0 = np.random.uniform(0.3, 0.7, 24)
-        ablns, quars, _, _ = evS.analyzeSolutions([x0], ablnFile,
-                                                  heterXmlFiles,
+        ablns, quars, _, _ = evS.analyzeSolutions([x0], tissueWidth
+                                                  ablnFile, heterXmlFiles,
                                                   heterConsoleFiles,
                                                   batchtoolpath, tissueFile,
                                                   runDir)
@@ -249,10 +252,10 @@ if __name__ == '__main__':
         solutions = es.ask()
         times.append(time.time())
         ablns, quars, conns, runTimes = evS.analyzeSolutions(
-                                             solutions, ablnFile,
-                                             heterXmlFiles, heterConsoleFiles,
-                                             batchtoolpath, tissueFile,
-                                             runDir)
+            solutions, tissueWidth, ablnFile,
+            heterXmlFiles, heterConsoleFiles,
+            batchtoolpath, tissueFile,
+            runDir)
         times.append(time.time())
         fitnesses = len(solutions) * [1]
 

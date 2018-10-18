@@ -38,9 +38,11 @@ if __name__ == '__main__':
 
     # Error checking of the command-line arguments
     if(not(0 <= startInd) or not(300 > startInd)):
-        raise argparse.ArgumentTypeError('start not in the correct range [0,299]')
+        raise argparse.ArgumentTypeError(
+            'start not in the correct range [0,299]')
     if(not(0 <= stopInd) or not(300 > stopInd)):
-        raise argparse.ArgumentTypeError('end not in the correct range [0,299]')
+        raise argparse.ArgumentTypeError(
+            'end not in the correct range [0,299]')
     if(not(startInd <= stopInd)):
         raise argparse.ArgumentTypeError('start not less than or equal to end')
     # Ensure paths don't end in /
@@ -143,15 +145,16 @@ if __name__ == '__main__':
     # x0 is the initial guess of the mean and should be checked to see
     #  if the ablation set it defines is feasible
     x0 = np.random.uniform(0.3, 0.7, 24)
-    ablns, quars, _, _ = evS.analyzeSolutions([x0], ablnFile, homogXmlFiles,
+    ablns, quars, _, _ = evS.analyzeSolutions([x0], tissueWidth,
+                                              ablnFile, homogXmlFiles,
                                               homogConsoleFiles,
                                               batchtoolpath, tissueFile,
                                               runDir)
     # Resample x0 if not feasible
     while(not evS.is_feasible(ablns[0], quars[0], tissueSize)):
         x0 = np.random.uniform(0.3, 0.7, 24)
-        ablns, quars, _, _ = evS.analyzeSolutions([x0], ablnFile,
-                                                  homogXmlFiles,
+        ablns, quars, _, _ = evS.analyzeSolutions([x0], tissueWidth,
+                                                  ablnFile, homogXmlFiles,
                                                   homogConsoleFiles,
                                                   batchtoolpath, tissueFile,
                                                   runDir)
@@ -162,7 +165,7 @@ if __name__ == '__main__':
     #  a genome 24 entries long,  a sigma of 0.1,
     #  number of children made per gen = 15,
     #  number of parent slots = popsize // 2 = 7
-    #  Restrict the values to the range [0,1]   
+    #  Restrict the values to the range [0,1]
     es = cma.CMAEvolutionStrategy(x0, 0.1,
                                   {'popsize': 15,
                                    'bounds': [0, 1],
@@ -183,10 +186,10 @@ if __name__ == '__main__':
         solutions = es.ask()
         times.append(time.time())
         ablns, quars, conns, runTimes = evS.analyzeSolutions(
-                                             solutions, ablnFile,
-                                             homogXmlFiles, homogConsoleFiles,
-                                             batchtoolpath, tissueFile,
-                                             runDir)
+            solutions, tissueWidth, ablnFile,
+            homogXmlFiles, homogConsoleFiles,
+            batchtoolpath, tissueFile,
+            runDir)
         times.append(time.time())
         fitnesses = len(solutions) * [1]  # Create a list numSolutions long
         for i in range(len(fitnesses)):
