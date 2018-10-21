@@ -29,7 +29,7 @@ by Geo. Dylan Dickerson
 	apt-get -y update && apt-get -y dist-upgrade
 	# Make needed directories for binding
 	# Note this assumes the repo with code is at /gscratch/afibProject
-	mkdir -p /project /gscratch/afibProject /lscratch
+	mkdir -p /project /gscratch/gdicker1/afibProject /lscratch
 
 %environment
 	PYPATH="/Software/anaconda3/bin"

@@ -1,0 +1,32 @@
+
+-- VisibleEP :: Batch Tool --
+
+
+# Batch profile
+
+  Simulations: 1
+  Concurrency: 1
+
+  Simulation ID: 0
+  - Iterations: 2500
+  - Inputs: 1
+     0: Tissues/80x80_RC10.vepxml
+  - Outputs: 0
+  - Events:102
+
+
+# Execution status
+
+Preparing simulation ID 0 with input ID 0...model loaded successfully.
+ Outputs: 
+>>Starting run 0: simulation ID 0, input ID 0
+Ablated 0 cells.
+APD changed for 6400 cells.
+There are 12640 cells connections defined in resistance input file.
+Resistance changed for 12640 cell pairs.
+>>Run 0 completed: 2500 steps
+
+__Runtime summary__
+0: 2500
+
+Batch processing completed.

@@ -85,9 +85,6 @@ if __name__ == '__main__':
     apInitDir = os.path.join(apDir, 'initial')
     apMidDir = os.path.join(apDir, 'midPoint')
     apFinDir = os.path.join(apDir, 'final')
-    # Ensure the checkQ directory exists
-    if(not('checkQ' in os.listdir(runDir))):
-        run(['mkdir', 'checkQ'])
     # Make directories to save the info to create gifs
     if(not('APTimes' in os.listdir(runDir))):
         run(['mkdir', 'APTimes'])
@@ -178,7 +175,7 @@ if __name__ == '__main__':
     #  custom file that logs iteration, fitness, solution for
     #  each of the 15 individuals in the combined parent, child population
     iteration = 0
-    midPoint = 200
+    midPoint = 200  # random point at which to save info to make a gif
     fW.writeSolutionsHeader(solutionFile)
     while not es.stop():
         loopStartTime = time.time()
@@ -215,8 +212,8 @@ if __name__ == '__main__':
             es.logger.add()  # Log with the built in CMAES logger
             iteration += 1  # Increase the iteration
         times.append(time.time())
-        print('CMAES Loop #{} took {} \n'.format(iteration,
-                                                 times[-1] - loopStartTime))
+        print('CMAES Loop #{} took {}'.format(iteration,
+                                              times[-1] - loopStartTime))
     for i in range(len(solutions)):
         for j in range(len(homogXmlFiles)):
             apFile = 'apTime_' + str(i) + '_' + str(j) + '.csv'

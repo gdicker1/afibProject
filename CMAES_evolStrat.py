@@ -4,14 +4,15 @@
  For UWyo Ind. Study in Genetic Algorithms Spring 2018
 '''
 
+import os
 import numpy as np
 from subprocess import run
 from collections import Counter
 from operator import itemgetter
-from CMAES_xmlMake import getRuntimes, xmlwriter_checkQ
+from CMAES_xmlMake import getRuntimes
 from createAblation import createAblationFile, setOnes
 
-from matplotlib import pyplot as plt
+# from matplotlib import pyplot as plt
 
 import time
 
@@ -34,24 +35,19 @@ def analyzeSolutions(solutions, tissueWidth, ablationFile, paramFiles,
         # Generate the ablation set file
         createAblationFile(x, ablationFile)
         # count the number ablated and add to list
-        t1 = time.time()
-        cells = np.loadtxt(ablationFile)
+        cells = np.loadtxt(ablationFile, dtype=int)
         ablations[i] = np.sum(cells)
-        t2 = time.time()
-        print('Finding Ablated took', t2 - t1)
+        # print('Finding Ablated took', t2 - t1)
         quarantines[i] = getQuarantined(cells, tissueWidth)
-        t3 = time.time()
-        print('Finding quarantined took', t3 - t2)
-        connecteds[i] = getContiguous(x)
-        t4 = time.time()
-        print('Finding connected took', t4 - t3)
+        # print('Finding quarantined took', t3 - t2)
+        connecteds[i] = getContiguous(x, tissueWidth)
+        # print('Finding connected took', t4 - t3)
 
         # List to hold the activations of each paramFile
         tempTimes = len(paramFiles) * [0]
         # Each solution needs to generalize over all the tissues presented
         for j, xmlFile in enumerate(paramFiles):
             # For redirecting batchtool output
-            t5 = time.time()
             with open(logFiles[j], 'w') as file:
                 #  Ensure the output csv file exists
                 outputFile = os.path.join(
@@ -62,14 +58,13 @@ def analyzeSolutions(solutions, tissueWidth, ablationFile, paramFiles,
                 runcommand = [batchToolPath +
                               '/VisibleEP_BatchTool_1', xmlFile]
                 run(runcommand, stdout=file)  # Running tissue in the simulator
-            t6 = time.time()
-            print('Running in sim took', t6 - t5)
+            # print('Running in sim took', t6 - t5)
             tempTimes[j] = getRuntimes(logFiles[j])  # simulation steps
             # Relocate the output to make sure in the correct location
             run(['mv', outDir + 'simdata__sim0_input0_ApTimeFlag.csv',
                  outputFile])
         runTimes[i] = np.sum(tempTimes) / len(paramFiles)
-        print('Finding runtime took', time.time() - t4)
+        # print('Finding runtime took', time.time() - t4)
 
     return ablations, quarantines, connecteds, runTimes
 
@@ -101,11 +96,11 @@ def getContiguous(solution, tissueWidth):
             xs.append(solution[i])
         else:
             ys.append(solution[i])
-    # Map all points from [0,1] to [0, tissueWidth-1] end inclusive
+    # Map all points from [0,1] to [0, tissueWidth - 1] end inclusive
     for i in range(len(xs)):
-        x = np.floor(tissueWidth-1 * xs[i])
-        if x > tissueWidth-1:
-            x = tissueWidth-1
+        x = np.floor(tissueWidth - 1 * xs[i])
+        if x > tissueWidth - 1:
+            x = tissueWidth - 1
         elif x < 0:
             x = 0
         else:
@@ -113,9 +108,9 @@ def getContiguous(solution, tissueWidth):
         xs[i] = x
 
     for i in range(len(ys)):
-        y = np.floor(tissueWidth-1 * ys[i])
-        if y > tissueWidth-1:
-            y = tissueWidth-1
+        y = np.floor(tissueWidth - 1 * ys[i])
+        if y > tissueWidth - 1:
+            y = tissueWidth - 1
         elif y < 0:
             y = 0
         else:
@@ -124,9 +119,9 @@ def getContiguous(solution, tissueWidth):
 
     # Check for points on the boundary
     xHas0 = xs.count(0)
-    xHas79 = xs.count(tissueWidth-1)
+    xHas79 = xs.count(tissueWidth - 1)
     yHas0 = ys.count(0)
-    yHas79 = ys.count(tissueWidth-1)
+    yHas79 = ys.count(tissueWidth - 1)
 
     if(xHas0 or xHas79 or yHas0 or yHas79):
         # Create the x-y point pairs
@@ -150,10 +145,10 @@ def getContiguous(solution, tissueWidth):
 
         # Add every point on the boundary to the frontier
         for i, x in enumerate(xs):
-            if((x == 0) or (x == tissueWidth-1)):
+            if((x == 0) or (x == tissueWidth - 1)):
                 frontier.append(points[i])
         for i, y in enumerate(ys):
-            if((y == 0) or (y == tissueWidth-1)):
+            if((y == 0) or (y == tissueWidth - 1)):
                 frontier.append(points[i])
 
         while(len(frontier) > 0):
@@ -175,7 +170,7 @@ def getContiguous(solution, tissueWidth):
             visited[str((focus[0], focus[1]))] = True
 
             # Add points around the focus to frontier if the point is in the
-            #  square defined by [0,tissueWidth-1], they are 1 in cells, and
+            #  square defined by [0,tissueWidth - 1], they are 1 in cells, and
             #  not visited
             # Move left
             if(focus[0] - 1 >= 0):
@@ -185,7 +180,7 @@ def getContiguous(solution, tissueWidth):
                    not(str((testX, testY)) in visited.keys())):
                     frontier.append((testX, testY))
             # Move right
-            if(focus[0] + 1 <= tissueWidth-1):
+            if(focus[0] + 1 <= tissueWidth - 1):
                 testX = focus[0] + 1
                 testY = focus[1]
                 if((cells[testX, testY] == 1) and
@@ -199,7 +194,7 @@ def getContiguous(solution, tissueWidth):
                    not(str((testX, testY)) in visited.keys())):
                     frontier.append((testX, testY))
             # Move up
-            if(focus[1] + 1 >= 0):
+            if(focus[1] + 1 <= tissueWidth - 1):
                 testX = focus[0]
                 testY = focus[1] + 1
                 if((cells[testX, testY] == 1) and
@@ -212,7 +207,7 @@ def getContiguous(solution, tissueWidth):
         return 0
 
 
-def getQuarantined(cells,  tissueWidth):
+def getQuarantined(cells, tissueWidth):
     '''
     Changes a matrix based on the ablated cells to find the separate groups
      and returns the number of cells that aren't ablated and aren't in the
@@ -222,64 +217,64 @@ def getQuarantined(cells,  tissueWidth):
     cells = cells.reshape(tissueWidth, tissueWidth)
 
     unGrouped = []  # The cells we need to assign to a group
-    ablated = []  # Cells ablated in ablnFile
-    explored = []  # Cells we have alread "focused" on
+    grouped = {}  # Cells we have already "grouped
     frontier = []  # Cells we are considering to group
     for i in range(0, tissueWidth):
         for j in range(0, tissueWidth):
             if(cells[i, j] == 0):
                 unGrouped.append((i, j))
             else:
-                ablated.append((i, j))
+                # Ablated cells are already grouped
+                grouped[str((i, j))] = True
 
     groupId = 1  # Start at 1, the groupId for ablated cells
     while(len(unGrouped) > 0):
         groupId += 1  # Increment groupId to an unused value
         frontier.append(unGrouped[0])
-        while(len(frontier) > 0):
+        while(len(frontier) > 0 and len(unGrouped) > 0):
             # Consider a new cell
             focus = frontier.pop()
-            # Ensure not in explored already (shouldn't happen)
-            while(focus in explored):
+            # Ensure not in grouped already (shouldn't happen)
+            while(str(focus) in grouped.keys()):
                 if(len(frontier) > 0):
+                    print("Already seen (", focus[0], ", ", focus[1], ")")
                     focus = frontier.pop()
                 else:
                     break
 
-            explored.append(focus)  # Now seen this cell
+            grouped[str((focus[0], focus[1]))] = True  # Now seen this cell
             cells[focus[0], focus[1]] = groupId  # Assign group
-            if(focus in unGrouped):  # Safety
-                unGrouped.remove(focus)  # Now grouped
+            unGrouped.remove(focus)  # Now grouped
             # Add points around the focus to frontier if the point is in the
-            #  square defined by [0,tissueWidth-1], they are unablated,
-            #  and not explored
+            #  square defined by [0,tissueWidth - 1], they are unablated,
+            #  and not grouped
             # Move left
             if(focus[0] - 1 >= 0):
                 testX = focus[0] - 1
                 testY = focus[1]
-                if(not((testX, testY) in ablated) and
-                   not((testX, testY) in explored)):
+                if(not(str((testX, testY)) in grouped.keys()) and
+                   not((testX, testY) in frontier)):
                     frontier.append((testX, testY))
             # Move right
-            if(focus[0] + 1 <= tissueWidth-1):
+            if(focus[0] + 1 <= tissueWidth - 1):
                 testX = focus[0] + 1
                 testY = focus[1]
-                if(not((testX, testY) in ablated) and
-                   not((testX, testY) in explored)):
+                if(not(str((testX, testY)) in grouped.keys()) and
+                   not((testX, testY) in frontier)):
                     frontier.append((testX, testY))
             # Move down
             if(focus[1] - 1 >= 0):
                 testX = focus[0]
                 testY = focus[1] - 1
-                if(not((testX, testY) in ablated) and
-                   not((testX, testY) in explored)):
+                if(not(str((testX, testY)) in grouped.keys()) and
+                   not((testX, testY) in frontier)):
                     frontier.append((testX, testY))
             # Move up
-            if(focus[1] + 1 <= tissueWidth-1):
+            if(focus[1] + 1 <= tissueWidth - 1):
                 testX = focus[0]
                 testY = focus[1] + 1
-                if(not((testX, testY) in ablated) and
-                   not((testX, testY) in explored)):
+                if(not(str((testX, testY)) in grouped.keys()) and
+                   not((testX, testY) in frontier)):
                     frontier.append((testX, testY))
 
     # Count the number in each group

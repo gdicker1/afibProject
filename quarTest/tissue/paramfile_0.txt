@@ -1,0 +1,420 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<cardiac-EP-model>
+  <simulations concurrency="1">
+    <simulation iterations="2500" triggeredStop="true">
+      <inputs>
+        <input format="xml">Tissues/80x80_RC10.vepxml</input>
+      </inputs>
+      <outputs/>
+      <events>
+        <event occurAt="0" type="move-electrode">
+          <index>0</index>
+          <x>18</x>
+          <y>14</y>
+          <z>0.01</z>
+        </event>
+        <event occurAt="0" type="ablation">
+          <file>quarTest/abln.txt</file>
+        </event>
+        <event occurAt="0" type="nrepol">
+          <file>quarTest/apd_0.txt</file>
+        </event>
+        <event occurAt="0" type="change-resistance">
+          <file>quarTest/res_0.txt</file>
+        </event>
+        <event occurAt="0" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="10" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="20" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="30" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="40" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="50" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="60" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="70" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="80" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="90" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="100" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="110" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="120" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="130" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="140" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="150" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="160" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="170" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="180" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="190" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="200" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="210" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="220" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="230" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="240" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="250" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="260" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="270" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="280" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="290" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="300" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="310" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="320" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="330" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="340" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="350" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="360" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="370" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="380" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="390" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="400" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="410" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="420" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="430" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="440" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="450" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="460" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="470" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="480" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="490" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="500" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="510" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="520" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="530" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="540" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="550" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="560" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="570" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="580" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="590" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="600" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="610" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="620" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="630" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="640" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="650" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="660" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="670" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="680" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="690" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="700" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="710" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="720" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="730" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="740" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="750" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="760" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="770" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="780" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="790" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="800" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="810" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="820" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="830" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="840" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="850" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="860" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="870" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="880" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="890" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="900" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="910" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="920" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="930" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="940" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="950" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="960" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+        <event occurAt="970" type="stimulate-electrode">
+          <index>0</index>
+          <magnitude>0.2</magnitude>
+        </event>
+      </events>
+    </simulation>
+  </simulations>
+</cardiac-EP-model>

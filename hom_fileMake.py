@@ -18,7 +18,8 @@ if __name__ == '__main__':
     parser.add_argument('stop', metavar='stp', type=int,
                         default=300,
                         help='Final index for file names (non-inclusive)')
-    parser.add_argument('runDir', type=str)
+    parser.add_argument('runDir', type=str,
+                        help='Directory where files will be saved')
 
     argDict = vars(parser.parse_args())
     startInd = int(argDict['start'])
@@ -28,7 +29,6 @@ if __name__ == '__main__':
     APD = 130  # APD = 100+/-25
     RES = 9  # For uniform RC in homogeneous tissue
     duration = 2500  # We want 2.5 seconds of activation
-    numTissues = 1  # We want 10 homogeneous tissues
     tissueHeight = 80  # We are 80 cells tall
     tissueWidth = 80  # 80 cells wide
     tissueSize = tissueHeight * tissueWidth  # Total number of cells in tissue

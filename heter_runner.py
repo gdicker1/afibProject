@@ -88,9 +88,6 @@ if __name__ == '__main__':
     apInitDir = os.path.join(apDir, 'initial')
     apMidDir = os.path.join(apDir, 'midPoint')
     apFinDir = os.path.join(apDir, 'final')
-    # Ensure the checkQ directory exists
-    if(not('checkQ' in os.listdir(runDir))):
-        run(['mkdir', 'checkQ'])
     # Make directories to save the info to create gifs
     if(not('APTimes' in os.listdir(runDir))):
         run(['mkdir', 'APTimes'])
@@ -217,7 +214,7 @@ if __name__ == '__main__':
                                               runDir)
     while(not evS.is_feasible(ablns[0], quars[0], tissueSize)):
         x0 = np.random.uniform(0.3, 0.7, 24)
-        ablns, quars, _, _ = evS.analyzeSolutions([x0], tissueWidth
+        ablns, quars, _, _ = evS.analyzeSolutions([x0], tissueWidth,
                                                   ablnFile, heterXmlFiles,
                                                   heterConsoleFiles,
                                                   batchtoolpath, tissueFile,
@@ -283,8 +280,8 @@ if __name__ == '__main__':
             es.logger.add()  # Log with the built in CMAES logger
             iteration += 1  # Increase the iteration
         times.append(time.time())
-        print('CMAES Loop #{} took {} \n'.format(iteration,
-                                                 times[-1] - loopStartTime))
+        print('CMAES Loop #{} took {}'.format(iteration,
+                                              times[-1] - loopStartTime))
     for i in range(len(solutions)):
         for j in range(len(heterXmlFiles)):
             apFile = 'apTime_' + str(i) + '_' + str(j) + '.csv'

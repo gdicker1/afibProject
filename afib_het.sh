@@ -1,6 +1,6 @@
 #!/bin/sh
 CMADIR="/gscratch/afibProject"
-RUNDIR="$CMADIR/Text_Files/homogeneous/$(date +%s)"
+RUNDIR="$CMADIR/Text_Files/heterogeneous/$(date +%s)"
 mkdir -p $RUNDIR
 cd $RUNDIR
 ### load relevant modules
@@ -11,6 +11,6 @@ echo "Starting job at $(date)"
 ###  the directory of the batchtool, directory of the reference tissue
 ###  and the indices of the APD, Resistance, and Parameter files to modify
 singularity exec -B $CMADIR $CMADIR/afib.simg  \
-python $CMADIR/homog_runner.py $CMADIR/Batchtool/ \
+python $CMADIR/heter_runner.py $CMADIR/Batchtool/ \
 $CMADIR/Tissues/ 0 0
 echo "Job finished at $(date)"
