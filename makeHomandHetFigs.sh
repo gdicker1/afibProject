@@ -1,6 +1,6 @@
-touch /extHDD/slurmFiles/homFigMakeLog.txt
-touch /extHDD/slurmFiles/hetFigMakeLog.txt
-sleep 2
-python multiFigMake.py /extHDD/slurmFiles/homogeneous/ /extHDD/slurmFiles/analysis /gscratch/gdicker1/CMAES_runner/Tissues/ /gscratch/gdicker1/CMAES_runner/Batchtool/VepCore/ 0 29 --gif > /extHDD/slurmFiles/homFigMakeLog.txt
-python multiFigMake.py /extHDD/slurmFiles/heterogeneous/ /extHDD/slurmFiles/analysis /gscratch/gdicker1/CMAES_runner/Tissues/ /gscratch/gdicker1/CMAES_runner/Batchtool/VepCore/ 0 29 --het --gif > /extHDD/slurmFiles/hetFigMakeLog.txt
+touch $PWD/homFigMakeLog.txt
+touch $PWD/hetFigMakeLog.txt
+sleep 1
+python multiFigMake.py $PWD/slurmFiles/homogeneous/ $PWD/analysis $PWD/Tissues/ $PWD/Batchtool/VepCore/ 0 29 --gif --bndTest > $PWD/homFigMakeLog.txt
+python multiFigMake.py $PWD/slurmFiles/heterogeneous/ $PWD/analysis $PWD/Tissues/ $PWD/Batchtool/VepCore/ 0 29 --het --gif --bndTest > $PWD/hetFigMakeLog.txt
 

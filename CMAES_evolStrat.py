@@ -88,6 +88,7 @@ def getContiguous(solution, tissueWidth):
         using principles established for graph traversal.
         Input is a afib solution, 1-d list of 24 entries in range [0,1]
     '''
+
     # Create the point pairs from solutions
     xs = []
     ys = []
@@ -96,9 +97,10 @@ def getContiguous(solution, tissueWidth):
             xs.append(solution[i])
         else:
             ys.append(solution[i])
+
     # Map all points from [0,1] to [0, tissueWidth - 1] end inclusive
     for i in range(len(xs)):
-        x = np.floor(tissueWidth - 1 * xs[i])
+        x = np.floor((tissueWidth - 1) * xs[i])
         if x > tissueWidth - 1:
             x = tissueWidth - 1
         elif x < 0:
@@ -108,7 +110,7 @@ def getContiguous(solution, tissueWidth):
         xs[i] = x
 
     for i in range(len(ys)):
-        y = np.floor(tissueWidth - 1 * ys[i])
+        y = np.floor((tissueWidth - 1) * ys[i])
         if y > tissueWidth - 1:
             y = tissueWidth - 1
         elif y < 0:
@@ -237,7 +239,6 @@ def getQuarantined(cells, tissueWidth):
             # Ensure not in grouped already (shouldn't happen)
             while(str(focus) in grouped.keys()):
                 if(len(frontier) > 0):
-                    print("Already seen (", focus[0], ", ", focus[1], ")")
                     focus = frontier.pop()
                 else:
                     break

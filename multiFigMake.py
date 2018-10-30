@@ -13,11 +13,27 @@ from subprocess import run
 import numpy as np
 from numpy.random import random_integers
 from scipy.stats.mstats import ttest_ind
+from matplotlib import rcParams
 from matplotlib import cm
 from matplotlib import pyplot as plt
 
 from CMAES_xmlMake import runtimeToVM_AblnOnly, getRuntimes
 from createAblation import createAblationFile, createDisconnAblnFile
+
+params = {
+    'axes.labelsize': 8,
+    'font.size': 8,
+    'legend.fontsize': 10,
+    'legend.frameon': True,
+    'legend.facecolor': 'white',
+    'legend.edgecolor': 'grey',
+    'legend.framealpha': 1,
+    'legend.borderpad': 0.2,
+    'xtick.labelsize': 10,
+    'ytick.labelsize': 10,
+    'text.usetex': False
+}
+rcParams.update(params)
 
 bestAblnC = np.array((255, 0, 0)) / 255  # Red
 ablnBarC = np.array((255, 0, 0, 127)) / 255  # Half apha value for bars
@@ -30,6 +46,14 @@ fitBarC = np.array((0, 0, 255, 127)) / 255
 bestLAC = np.array((255, 165, 0)) / 255  # Orange
 LAbarC = np.array((255, 165, 0, 127)) / 255
 barColor = np.array((255, 0, 255, 127)) / 255  # Pinkish purple
+
+
+def getMedians(data):
+    median = np.median(data, axis=1)
+    perc25 = np.percentile(data, 25, axis=1)
+    perc75 = np.percentile(data, 75, axis=1)
+
+    return median, perc25, perc75
 
 
 def createGif(apFiles, gifDir, gifName):
@@ -126,7 +150,6 @@ if __name__ == '__main__':
     print('batchDir:', batchDir)
     print('startInd:', startInd)
     print('stopInd:', stopInd)
-    print('\n')
 
     imageDir = os.path.join(resDir, 'Images')
     gifDir = os.path.join(resDir, 'Gifs')
@@ -149,25 +172,27 @@ if __name__ == '__main__':
 
     batchPath = os.path.join(batchDir, 'VisibleEP_BatchTool_1')
 
+    recLen = 200  # Record length corresponds to 2000 epochs
+
     # Arrays to store information over the multiple sets
-    ## For fitnesses
+    # For fitnesses
     bestFitnesses = np.empty((200, stopInd - startInd + 1))
     avgFitnesses = np.empty((200, stopInd - startInd + 1))
-    ## For ablations
+    # For ablations
     bestAblns = np.empty((200, stopInd - startInd + 1))
     avgAblns = np.empty((200, stopInd - startInd + 1))
-    ## For number quarantined
+    # For number quarantined
     bestQuaras = np.empty((200, stopInd - startInd + 1))
     avgQuaras = np.empty((200, stopInd - startInd + 1))
-    ## For number connected
+    # For number connected
     bestConnes = np.empty((200, stopInd - startInd + 1))
     avgConnes = np.empty((200, stopInd - startInd + 1))
-    ## For L/A ratios
+    # For L/A ratios
     bestLAs = np.empty((200, stopInd - startInd + 1))
     avgLAs = np.empty((200, stopInd - startInd + 1))
-    ## For the best ablation pattern for the sets
+    # For the best ablation pattern for the sets
     bestSolutions = np.empty((24, stopInd - startInd + 1))
-    ## For the position of tissue patches
+    # For the position of tissue patches
     patchPoses = np.empty(stopInd - startInd + 1)
 
     print('Creating images and gifs from the data')
@@ -218,40 +243,51 @@ if __name__ == '__main__':
         bestSol = data[-15][-24:]  # Best abln pattern from final gen
 
         padLength = 200 - fits.shape[0]
+
         bestAbls = ablns.T[0]
         bestAblns.T[i] = np.pad(bestAbls, (0, padLength), 'edge')
         avgAbls = np.average(ablns, axis=1)
         avgAblns.T[i] = np.pad(avgAbls, (0, padLength), 'edge')
-        errorAbls = np.std(ablns, axis=1) / ablns.shape[1]
+        medAblns, per25Ablns, per75Ablns = getMedians(ablns)
 
         bestQuars = quars.T[0].T
         bestQuaras.T[i] = np.pad(bestQuars, (0, padLength), 'edge')
         avgQuars = np.average(quars, axis=1)
         avgQuaras.T[i] = np.pad(avgQuars, (0, padLength), 'edge')
-        errorQuars = np.std(quars, axis=1) / quars.shape[1]
+        medQuars, per25Quars, per75Quars = getMedians(quars)
 
         bestConns = conns.T[0]
         bestConnes.T[i] = np.pad(bestConns, (0, padLength), 'edge')
         avgConns = np.average(conns, axis=1)
         avgConnes.T[i] = np.pad(avgConns, (0, padLength), 'edge')
-        errorConns = np.std(conns, axis=1) / conns.shape[1]
+        medConns, per25Conns, per75Conns = getMedians(conns)
 
         bestLA = las.T[0]
         bestLAs.T[i] = np.pad(bestLA, (0, padLength), 'edge')
         avgLA = np.average(las, axis=1)
         avgLAs.T[i] = np.pad(avgLA, (0, padLength), 'edge')
-        errorLA = np.std(las, axis=1) / las.shape[1]
+        medLAs, per25LAs, per75LAs = getMedians(las)
 
         bestFits = fits.T[0].T
         bestFitnesses.T[i] = np.pad(bestFits, (0, padLength), 'edge')
         avgFits = np.average(fits, axis=1)
         avgFitnesses.T[i] = np.pad(avgFits, (0, padLength), 'edge')
-        errorFits = np.std(fits, axis=1) / fits.shape[1]
+        medFits, per25Fits, per75Fits = getMedians(fits)
 
         bestSolutions.T[i] = bestSol
 
         # Creating a figure summary of best tissue parameters for this set
         summaryFig, summAx = plt.subplots(1, 1)
+        summAx.spines['top'].set_visible(False)
+        summAx.spines['left'].set_visible(False)
+        summAx.spines['right'].set_visible(False)
+        summAx.get_xaxis().tick_bottom()
+        summAx.get_yaxis().tick_left()
+        summAx.tick_params(axis='x', direction='out')
+        summAx.tick_params(axis='y', length=0)
+        summAx.grid(axis='y', color="0.9", linestyle='-', linewidth=1)
+        summAx.set_axisbelow(True)
+
         summAx.plot(iterations, bestAbls, linestyle='-',
                     color=bestAblnC, label='Best Ablated')
         summAx.plot(iterations, bestQuars, linestyle='-',
@@ -264,8 +300,8 @@ if __name__ == '__main__':
                     color=bestLAC, label='Best Length/Area ratio')
         plt.title(setDirName + ' Summary')
         plt.xlabel('Epochs')
-        plt.ylabel('Proportion')
-        plt.legend()
+        plt.ylabel('Proportion of 6400 cells')
+        plt.legend(loc=1)
         summaryFigFile = os.path.join(imageDir,
                                       'set{}_summary.png'.format(i))
         summaryFig.savefig(summaryFigFile, format='png', bbox_inches='tight')
@@ -273,22 +309,40 @@ if __name__ == '__main__':
 
         # Creating figure summmary of average tissue parameters for this set
         tissuePropFig, tissueAx = plt.subplots(1, 1)
-        tissueAx.errorbar(iterations, avgAbls, yerr=errorAbls,
-                          ecolor=ablnBarC, capsize=2.5, linestyle='--',
-                          color=bestAblnC, label='Average Ablated')
-        tissueAx.errorbar(iterations, bestQuars, yerr=errorQuars,
-                          ecolor=quarBarC, capsize=2.5, linestyle='--',
-                          color=bestQuarsC, label='Average Quarantined')
-        tissueAx.errorbar(iterations, avgConns, yerr=errorConns,
-                          ecolor=connBarC, capsize=2.5, linestyle='--',
-                          color=bestConnsC, label='Average Connected')
-        tissueAx.errorbar(iterations, avgLA, yerr=errorLA,
-                          ecolor=LAbarC, capsize=2.5, linestyle='--',
-                          color=bestLAC, label='Length/Area ratio')
-        plt.title(setDirName + ' Average Tissue Properties')
+        tissueAx.spines['top'].set_visible(False)
+        tissueAx.spines['left'].set_visible(False)
+        tissueAx.spines['right'].set_visible(False)
+        tissueAx.get_xaxis().tick_bottom()
+        tissueAx.get_yaxis().tick_left()
+        tissueAx.tick_params(axis='x', direction='out')
+        tissueAx.tick_params(axis='y', length=0)
+        tissueAx.grid(axis='y', color="0.9", linestyle='-', linewidth=1)
+        tissueAx.set_axisbelow(True)
+
+        tissueAx.fill_between(iterations, per25Ablns, per75Ablns,
+                              alpha=0.25, color=bestAblnC, linewidth=0)
+        tissueAx.plot(iterations, medAblns,
+                      color=bestAblnC, linewidth=2, linestyle='--',
+                      label='Median Ablations')
+        tissueAx.fill_between(iterations, per25Quars, per75Quars,
+                              alpha=0.25, color=bestQuarsC, linewidth=0)
+        tissueAx.plot(iterations, medQuars,
+                      color=bestQuarsC, linewidth=2, linestyle='--',
+                      label='Median Quarantined')
+        tissueAx.fill_between(iterations, per25Conns, per75Conns,
+                              alpha=0.25, color=bestConnsC, linewidth=0)
+        tissueAx.plot(iterations, medConns,
+                      color=bestConnsC, linewidth=2, linestyle='--',
+                      label='Median Connected')
+        tissueAx.fill_between(iterations, per25LAs, per75LAs,
+                              alpha=0.25, color=bestLAC, linewidth=0)
+        tissueAx.plot(iterations, medLAs,
+                      color=bestLAC, linewidth=2, linestyle='--',
+                      label='Median Length/Area')
+        plt.title(setDirName + ' Median Tissue Properties')
         plt.xlabel('Epochs')
         plt.ylabel('Proportion of 6400 cells')
-        plt.legend()
+        plt.legend(loc=1)
         propFigFile = os.path.join(imageDir,
                                    'set{}_tissueProp.png'.format(i))
         tissuePropFig.savefig(propFigFile, format='png', bbox_inches='tight')
@@ -296,15 +350,24 @@ if __name__ == '__main__':
 
         # Creating the summary fitness plot of this set
         fitnessFig, fitAx = plt.subplots(1, 1)
+        fitAx.spines['top'].set_visible(False)
+        fitAx.spines['left'].set_visible(False)
+        fitAx.spines['right'].set_visible(False)
+        fitAx.get_xaxis().tick_bottom()
+        fitAx.get_yaxis().tick_left()
+        fitAx.tick_params(axis='x', direction='out')
+        fitAx.tick_params(axis='y', length=0)
+        fitAx.grid(axis='y', color="0.9", linestyle='-', linewidth=1)
+        fitAx.set_axisbelow(True)
+
         fitAx.plot(iterations, bestFits, linestyle='-',
                    color=bestFitsC, label='Best Fitness')
-        fitAx.errorbar(iterations, avgFits, yerr=errorFits,
-                       ecolor=fitBarC, capsize=2.5, linestyle='--',
-                       color=bestFitsC, label='Average Fitness')
+        fitAx.plot(iterations, avgFits, linestyle='--',
+                   color=bestFitsC, label='Mean Fitness')
         plt.title(setDirName + ' Fitness')
         plt.xlabel('Epochs')
-        plt.ylabel('Proprotion of 1500 ms')
-        plt.legend()
+        plt.ylabel('Proportion of 10000 ms')
+        plt.legend(loc=1)
         fitFigFile = os.path.join(imageDir,
                                   'set{}_fits.png'.format(i))
         fitnessFig.savefig(fitFigFile, format='png', bbox_inches='tight')
@@ -312,91 +375,126 @@ if __name__ == '__main__':
         print('\tImages made for set{}'.format(i))
 
     # Getting summary stats of the best and average fitnesses
-    bestFitsAve = np.average(bestFitnesses, axis=1)
-    bestFitsErr = np.std(bestFitnesses, axis=1) / bestFitnesses.shape[1]
-    avgFitsAve = np.average(avgFitnesses, axis=1)
-    avgFitsErr = np.std(avgFitnesses, axis=1) / avgFitnesses.shape[1]
+    bestFitsMed, bestFits25, bestFits75 = getMedians(bestFitnesses)
+    avgFitsMed, avgFits25, avgFits75 = getMedians(avgFitnesses)
 
     # Summary stats of the tissue props
-    bestAblsAve = np.average(bestAblns, axis=1)
-    bestAblsErr = np.average(bestAblns, axis=1) / bestAblns.shape[1]
-    avgAblsAve = np.average(avgAblns, axis=1)
-    avgAblsErr = np.average(avgAblns, axis=1) / avgAblns.shape[1]
+    bestAblnsMed, bestAbln25, bestAbln75 = getMedians(bestAblns)
+    avgAblnsMed, avgAbln25, avgAbln75 = getMedians(avgAblns)
 
-    bestQuarasAve = np.average(bestQuaras, axis=1)
-    bestQuarasErr = np.average(bestQuaras, axis=1) / bestQuaras.shape[1]
-    avgQuarasAve = np.average(avgQuaras, axis=1)
-    avgQuarasErr = np.average(avgQuaras, axis=1) / avgQuaras.shape[1]
+    bestQuarsMed, bestQuars25, bestQuars75 = getMedians(bestQuaras)
+    avgQuarsMed, avgQuars25, avgQuars75 = getMedians(avgQuaras)
 
-    bestConnesAve = np.average(bestConnes, axis=1)
-    bestConnesErr = np.average(bestConnes, axis=1) / bestConnes.shape[1]
-    avgConnesAve = np.average(avgConnes, axis=1)
-    avgConnesErr = np.average(avgConnes, axis=1) / avgConnes.shape[1]
+    bestConnsMed, bestConns25, bestConns75 = getMedians(bestConnes)
+    avgConnsMed, avgConns25, avgConns75 = getMedians(avgConnes)
 
-    bestLAsAve = np.average(bestLAs, axis=1)
-    bestLAsErr = np.average(bestLAs, axis=1) / bestLAs.shape[1]
-    avgLAsAve = np.average(avgLAs, axis=1)
-    avgLAsErr = np.average(avgLAs, axis=1) / avgLAs.shape[1]
+    bestLAsMed, bestLAs25, bestLAs75 = getMedians(bestLAs)
+    avgLAsMed, avgLAs25, avgLAs75 = getMedians(avgLAs)
 
     # Plotting the summary stats of the best and avg fits
     fitSummary, ax = plt.subplots(1, 1)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    ax.get_xaxis().tick_bottom()
+    ax.get_yaxis().tick_left()
+    ax.tick_params(axis='x', direction='out')
+    ax.tick_params(axis='y', length=0)
+    ax.grid(axis='y', color="0.9", linestyle='-', linewidth=1)
+    ax.set_axisbelow(True)
+
     epochs = np.arange(bestFitnesses.shape[0]) * 10
-    ax.errorbar(epochs, bestFitsAve, yerr=bestFitsErr,
-                ecolor=fitBarC, capsize=2.5, linestyle='-',
-                color=bestFitsC, label='Best Fitness')
-    ax.errorbar(epochs, avgFitsAve, yerr=bestFitsErr,
-                ecolor=fitBarC, capsize=2.5, linestyle='--',
-                color=bestFitsC, label='Average Fitness')
+
+    ax.fill_between(epochs, bestFits25, bestFits75,
+                    alpha=0.25, color=bestFitsC, linewidth=0)
+    ax.plot(epochs, bestFitsMed, linestyle='-',
+            color=bestFitsC, linewidth=2, label="Best Fitness of Homog runs")
+    ax.fill_between(epochs, avgFits25, avgFits75,
+                    alpha=0.25, color=bestFitsC, linewidth=0)
+    ax.plot(epochs, avgFitsMed, linestyle='--',
+            color=bestFitsC, linewidth=2, label="Mean Fitness of Homog runs")
+
     plt.title('Fitness Summary of All Runs')
     plt.xlabel('Epochs')
     plt.ylabel('Proprotion of 10000 ms')
-    plt.legend()
+    plt.legend(loc=1)
     fitSummFile = os.path.join(resDir, 'fitnessSummary.png')
     fitSummary.savefig(fitSummFile, format='png', bbox_inches='tight')
     plt.close()
 
     # Plotting the summary tissue props for best solutions
     bestTissueSummary, ax = plt.subplots(1, 1)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    ax.get_xaxis().tick_bottom()
+    ax.get_yaxis().tick_left()
+    ax.tick_params(axis='x', direction='out')
+    ax.tick_params(axis='y', length=0)
+    ax.grid(axis='y', color="0.9", linestyle='-', linewidth=1)
+    ax.set_axisbelow(True)
+
     epochs = np.arange(bestLAs.shape[0]) * 10
-    ax.errorbar(epochs, bestAblsAve, yerr=bestAblsErr,
-                ecolor=ablnBarC, capsize=2.5, linestyle='-',
-                color=bestAblnC, label='Best %Ablated')
-    ax.errorbar(epochs, bestQuarasAve, yerr=bestQuarasErr,
-                ecolor=quarBarC, capsize=2.5, linestyle='-',
-                color=bestQuarsC, label='Best %Quarantined')
-    ax.errorbar(epochs, bestConnesAve, yerr=bestConnesErr,
-                ecolor=connBarC, capsize=2.5, linestyle='-',
-                color=bestConnsC, label='Best %Connected')
-    ax.errorbar(epochs, bestLAsAve, yerr=bestLAsErr,
-                ecolor=LAbarC, capsize=2.5, linestyle='-',
-                color=bestLAC, label='Best L/A ratio')
+
+    ax.fill_between(epochs, bestAbln25, bestAbln75,
+                    alpha=0.25, color=bestAblnC, linewidth=0)
+    ax.plot(epochs, bestAblnsMed, linestyle='-',
+            color=bestAblnC, linewidth=2, label='Best %Ablated')
+    ax.fill_between(epochs, bestQuars25, bestQuars75,
+                    alpha=0.25, color=bestQuarsC, linewidth=0)
+    ax.plot(epochs, bestQuarsMed, linestyle='-',
+            color=bestQuarsC, linewidth=2, label='Best %Quarantined')
+    ax.fill_between(epochs, bestConns25, bestConns75,
+                    alpha=0.25, color=bestConnsC, linewidth=0)
+    ax.plot(epochs, bestConnsMed, linestyle='-',
+            color=bestConnsC, linewidth=2, label='Best %Connected')
+    ax.fill_between(epochs, bestLAs25, bestLAs75,
+                    alpha=0.25, color=bestLAC, linewidth=0)
+    ax.plot(epochs, bestLAsMed, linestyle='-',
+            color=bestLAC, linewidth=2, label='Best L/A ratio')
     plt.title('Tissue Summary of All Runs for Best Solutions')
     plt.xlabel('Epochs')
     plt.ylabel('Proprotion')
-    plt.legend()
+    plt.legend(loc=1)
     tissueSummBestFile = os.path.join(resDir, 'tissuePropSummaryBest.png')
     bestTissueSummary.savefig(tissueSummBestFile, format='png', bbox_inches='tight')
     plt.close()
 
     # Plotting the summary tissue props averaged over solutions
     avgTissueSummary, ax = plt.subplots(1, 1)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    ax.get_xaxis().tick_bottom()
+    ax.get_yaxis().tick_left()
+    ax.tick_params(axis='x', direction='out')
+    ax.tick_params(axis='y', length=0)
+    ax.grid(axis='y', color="0.9", linestyle='-', linewidth=1)
+    ax.set_axisbelow(True)
+
     epochs = np.arange(avgLAs.shape[0]) * 10
-    ax.errorbar(epochs, avgAblsAve, yerr=avgAblsErr,
-                ecolor=ablnBarC, capsize=2.5, linestyle='--',
-                color=bestAblnC, label='Average %Ablated')
-    ax.errorbar(epochs, avgQuarasAve, yerr=avgQuarasErr,
-                ecolor=quarBarC, capsize=2.5, linestyle='--',
-                color=bestQuarsC, label='Average %Quarantined')
-    ax.errorbar(epochs, avgConnesAve, yerr=avgConnesErr,
-                ecolor=connBarC, capsize=2.5, linestyle='--',
-                color=bestConnsC, label='Average %Connected')
-    ax.errorbar(epochs, avgLAsAve, yerr=avgLAsErr,
-                ecolor=LAbarC, capsize=2.5, linestyle='--',
-                color=bestLAC, label='Average L/A ratio')
+
+    ax.fill_between(epochs, avgAbln25, avgAbln75,
+                    alpha=0.25, color=bestAblnC, linewidth=0)
+    ax.plot(epochs, avgAblnsMed, linestyle='-',
+            color=bestAblnC, linewidth=2, label='Average %Ablated')
+    ax.fill_between(epochs, avgQuars25, avgQuars75,
+                    alpha=0.25, color=bestQuarsC, linewidth=0)
+    ax.plot(epochs, avgQuarsMed, linestyle='-',
+            color=bestQuarsC, linewidth=2, label='Average %Quarantined')
+    ax.fill_between(epochs, avgConns25, avgConns75,
+                    alpha=0.25, color=bestConnsC, linewidth=0)
+    ax.plot(epochs, avgConnsMed, linestyle='-',
+            color=bestConnsC, linewidth=2, label='Average %Connected')
+    ax.fill_between(epochs, avgLAs25, avgLAs75,
+                    alpha=0.25, color=bestLAC, linewidth=0)
+    ax.plot(epochs, avgLAsMed, linestyle='-',
+            color=bestLAC, linewidth=2, label='Average L/A ratio')
+
     plt.title('Tissue Summary of All Runs Averaged over All Solutions')
     plt.xlabel('Epochs')
     plt.ylabel('Proprotion')
-    plt.legend()
+    plt.legend(loc=1)
     tissueSummAveFile = os.path.join(resDir, 'tissuePropSummaryAve.png')
     avgTissueSummary.savefig(tissueSummAveFile, format='png', bbox_inches='tight')
     plt.close()
