@@ -289,11 +289,11 @@ if __name__ == '__main__':
         summAx.set_axisbelow(True)
 
         summAx.plot(iterations, bestAbls, linestyle='-',
-                    color=bestAblnC, label='Best Ablated')
+                    color=bestAblnC, label='Best %Ablated')
         summAx.plot(iterations, bestQuars, linestyle='-',
-                    color=bestQuarsC, label='Best Quarantined')
+                    color=bestQuarsC, label='Best %Quarantined')
         summAx.plot(iterations, bestConns, linestyle='-',
-                    color=bestConnsC, label='Best Connected')
+                    color=bestConnsC, label='Best %Connected')
         summAx.plot(iterations, bestFits, linestyle='-',
                     color=bestFitsC, label='Best Fitness')
         summAx.plot(iterations, bestLA, linestyle='-',
@@ -323,17 +323,22 @@ if __name__ == '__main__':
                               alpha=0.25, color=bestAblnC, linewidth=0)
         tissueAx.plot(iterations, medAblns,
                       color=bestAblnC, linewidth=2, linestyle='--',
-                      label='Median Ablations')
+                      label='Median %Ablated')
         tissueAx.fill_between(iterations, per25Quars, per75Quars,
                               alpha=0.25, color=bestQuarsC, linewidth=0)
         tissueAx.plot(iterations, medQuars,
                       color=bestQuarsC, linewidth=2, linestyle='--',
-                      label='Median Quarantined')
+                      label='Median %Quarantined')
         tissueAx.fill_between(iterations, per25Conns, per75Conns,
                               alpha=0.25, color=bestConnsC, linewidth=0)
         tissueAx.plot(iterations, medConns,
                       color=bestConnsC, linewidth=2, linestyle='--',
-                      label='Median Connected')
+                      label='Median %Connected')
+        tissueAx.fill_between(iterations, per25Fits, per75Fits,
+                              alpha=0.25, color=bestFitsC, linewidth=0)
+        tissueAx.plot(iterations, medFits,
+                      color=bestFitsC, linewidth=2, linestyle='--',
+                      label='Median Fitness')
         tissueAx.fill_between(iterations, per25LAs, per75LAs,
                               alpha=0.25, color=bestLAC, linewidth=0)
         tissueAx.plot(iterations, medLAs,
@@ -439,20 +444,20 @@ if __name__ == '__main__':
     ax.fill_between(epochs, bestAbln25, bestAbln75,
                     alpha=0.25, color=bestAblnC, linewidth=0)
     ax.plot(epochs, bestAblnsMed, linestyle='-',
-            color=bestAblnC, linewidth=2, label='Best %Ablated')
+            color=bestAblnC, linewidth=2, label='Median Best %Ablated')
     ax.fill_between(epochs, bestQuars25, bestQuars75,
                     alpha=0.25, color=bestQuarsC, linewidth=0)
     ax.plot(epochs, bestQuarsMed, linestyle='-',
-            color=bestQuarsC, linewidth=2, label='Best %Quarantined')
+            color=bestQuarsC, linewidth=2, label='Median Best %Quarantined')
     ax.fill_between(epochs, bestConns25, bestConns75,
                     alpha=0.25, color=bestConnsC, linewidth=0)
     ax.plot(epochs, bestConnsMed, linestyle='-',
-            color=bestConnsC, linewidth=2, label='Best %Connected')
+            color=bestConnsC, linewidth=2, label='Median Best %Connected')
     ax.fill_between(epochs, bestLAs25, bestLAs75,
                     alpha=0.25, color=bestLAC, linewidth=0)
     ax.plot(epochs, bestLAsMed, linestyle='-',
-            color=bestLAC, linewidth=2, label='Best L/A ratio')
-    plt.title('Tissue Summary of All Runs for Best Solutions')
+            color=bestLAC, linewidth=2, label='Median Best L/A ratio')
+    plt.title('Tissue Summary of All Runs for Best Solutions per Generation')
     plt.xlabel('Epochs')
     plt.ylabel('Proprotion')
     plt.legend(loc=1)
@@ -477,21 +482,21 @@ if __name__ == '__main__':
     ax.fill_between(epochs, avgAbln25, avgAbln75,
                     alpha=0.25, color=bestAblnC, linewidth=0)
     ax.plot(epochs, avgAblnsMed, linestyle='-',
-            color=bestAblnC, linewidth=2, label='Average %Ablated')
+            color=bestAblnC, linewidth=2, label='Median Mean %Ablated')
     ax.fill_between(epochs, avgQuars25, avgQuars75,
                     alpha=0.25, color=bestQuarsC, linewidth=0)
     ax.plot(epochs, avgQuarsMed, linestyle='-',
-            color=bestQuarsC, linewidth=2, label='Average %Quarantined')
+            color=bestQuarsC, linewidth=2, label='Median Mean %Quarantined')
     ax.fill_between(epochs, avgConns25, avgConns75,
                     alpha=0.25, color=bestConnsC, linewidth=0)
     ax.plot(epochs, avgConnsMed, linestyle='-',
-            color=bestConnsC, linewidth=2, label='Average %Connected')
+            color=bestConnsC, linewidth=2, label='Median Mean %Connected')
     ax.fill_between(epochs, avgLAs25, avgLAs75,
                     alpha=0.25, color=bestLAC, linewidth=0)
     ax.plot(epochs, avgLAsMed, linestyle='-',
-            color=bestLAC, linewidth=2, label='Average L/A ratio')
+            color=bestLAC, linewidth=2, label='Median Mean L/A ratio')
 
-    plt.title('Tissue Summary of All Runs Averaged over All Solutions')
+    plt.title('Tissue Summary of All Runs Mean Values per Generation')
     plt.xlabel('Epochs')
     plt.ylabel('Proprotion')
     plt.legend(loc=1)
@@ -508,8 +513,8 @@ if __name__ == '__main__':
         print('\nTesting if there is a higher concentration of ablated cells in patch')
         testDir = os.path.join(tempDir, 'PatchConcentrationTest')
         ablnFile = os.path.join(testDir, 'abln.txt')
-        testLogFile = os.path.join(testDir, 'patchConcentrationTestResults.csv')
-        testStatFile = os.path.join(testDir, 'patchConcentrationStats.csv')
+        testLogFile = os.path.join(resDir, 'patchConcentrationTestResults.csv')
+        testStatFile = os.path.join(resDir, 'patchConcentrationStats.txt')
 
         patchWidth = 20
 
@@ -648,10 +653,10 @@ if __name__ == '__main__':
         with open(statTestFile, 'w') as statLog:
             statLog.write('Using 2-tailed t-test\n')
             statLog.write(tempString.format('NormAbln_less_EmptyAbln:',
-                                            nVeTval, nVePval / 2))
+                                            str(nVeTval), str(nVePval / 2)))
             statLog.write(tempString.format('NormAbln_less_UnconnectedAbln:',
-                                            nVuTval, nVuPval / 2))
+                                            str(nVuTval), str(nVuPval / 2)))
             statLog.write(tempString.format('NormAbln_less_SameNumAblnUnconn:',
-                                            nVsTval, nVsPval / 2))
+                                            str(nVsTval), str(nVsPval / 2)))
             statLog.write(tempString.format('UnconnectedAbln_equal_EmptyAbln:',
-                                            uVeTval, uVePval))
+                                            str(uVeTval), str(uVePval)))
